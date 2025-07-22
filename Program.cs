@@ -13,7 +13,7 @@ namespace Adarec_ui
 
             var fakeUser = new Model.DTOs.UserDto
             {
-                UserId = 123,
+                UserId = 3,
                 Name = "Juan Pérez",
                 Email = "juan.perez@ejemplo.com",
                 Password = "Password123!",
@@ -23,7 +23,7 @@ namespace Adarec_ui
 
             ApplicationConfiguration.Initialize();
             //Application.Run(new AppContext());
-            Application.Run(new View.MdiMaster(fakeUser, 3));
+            Application.Run(new View.MdiMaster(fakeUser, 2));
         }
     }
 }

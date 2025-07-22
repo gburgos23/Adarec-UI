@@ -100,7 +100,19 @@ namespace Adarec_ui.View
                 }
             }
 
-            Form formToShow = (Form)Activator.CreateInstance(formType)!;
+            Form formToShow;
+            if (formType == typeof(ChildForms.FrmNewOrder))
+            {
+                formToShow = (Form)Activator.CreateInstance(formType, _userData)!;
+            }
+            else if (formType == typeof(ChildForms.FrmTechnicianOrders))
+            {
+                formToShow = (Form)Activator.CreateInstance(formType, _userData, _rolSeleccionado)!;
+            }
+            else
+            {
+                formToShow = (Form)Activator.CreateInstance(formType)!;
+            }
             formToShow.TopLevel = false;
             formToShow.StartPosition = FormStartPosition.CenterParent;
             tab.Controls.Add(formToShow);
