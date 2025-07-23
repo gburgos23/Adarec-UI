@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             txtPassword = new MaterialSkin.Controls.MaterialTextBox2();
             txtUserName = new MaterialSkin.Controls.MaterialTextBox2();
             btnLogin = new MaterialSkin.Controls.MaterialButton();
@@ -164,6 +165,7 @@
             Controls.Add(txtUserName);
             Controls.Add(txtPassword);
             FormStyle = FormStyles.ActionBar_None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Login";
             Padding = new Padding(3, 24, 3, 3);

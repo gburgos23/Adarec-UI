@@ -143,6 +143,31 @@ namespace Adarec_ui.Controller
             }
         }
 
+        public async Task<ApiResponseDto> GetTechnicianWorkloadAsync()
+        {
+            using var client = new HttpClient();
+            var url = $"{_baseUrl}/api/Orders/workload";
+            try
+            {
+                var response = await client.GetAsync(url);
+                var message = await response.Content.ReadAsStringAsync();
+                return new ApiResponseDto
+                {
+                    Message = message,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponseDto
+                {
+                    Message = $"Error al obtener carga de trabajo: {ex.Message}",
+                    StatusCode = 500
+                };
+            }
+        }
+
+
         public async Task<ApiResponseDto> GetAllOrderStatusesAsync()
         {
             using var client = new HttpClient();
@@ -214,6 +239,32 @@ namespace Adarec_ui.Controller
                 return new ApiResponseDto
                 {
                     Message = $"Error al insertar los detalles de dispositivos: {ex.Message}",
+                    StatusCode = 500
+                };
+            }
+        }
+
+        public async Task<ApiResponseDto> GetTicketCountByStatusAsync(int? year = null, int? month = null, int? technicianId = null)
+        {
+            using var client = new HttpClient();
+            var url = $"{_baseUrl}/api/Orders/ticket-count?year={year}&month={month}";
+            if (technicianId.HasValue)
+                url += $"&technicianId={technicianId.Value}";
+            try
+            {
+                var response = await client.GetAsync(url);
+                var message = await response.Content.ReadAsStringAsync();
+                return new ApiResponseDto
+                {
+                    Message = message,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponseDto
+                {
+                    Message = $"Error al obtener el conteo de tickets por estado: {ex.Message}",
                     StatusCode = 500
                 };
             }

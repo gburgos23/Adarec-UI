@@ -25,20 +25,7 @@ namespace Adarec_ui
             CheckImagesDir();
 
             ApplicationConfiguration.Initialize();
-
-            var fakeUser = new Model.DTOs.UserDto
-            {
-                UserId = 2,
-                Name = "Juan Pérez",
-                Email = "juan.perez@ejemplo.com",
-                Password = "Password123!",
-                IdRol = [1, 2, 3],
-                Status = true
-            };
-
-            ApplicationConfiguration.Initialize();
-            //Application.Run(new AppContext());
-            Application.Run(new View.MdiMaster(fakeUser, 2));
+            Application.Run(new AppContext());
         }
     }
 }

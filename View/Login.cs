@@ -26,7 +26,7 @@ namespace Adarec_ui.View
 
             lblTitulo.Text = "Iniciar Sesión";
             lblTitulo.Font = new Font("Segoe UI", 17F, FontStyle.Regular);
-            lblTitulo.ForeColor = Color.FromArgb(0, 150, 136); // Verde azulado (como tu botón)
+            lblTitulo.ForeColor = Color.FromArgb(0, 150, 136);
             lblTitulo.BackColor = Color.Transparent;
             lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
             lblTitulo.AutoSize = false;
@@ -46,7 +46,6 @@ namespace Adarec_ui.View
 
         private async void BtnLogin_Click(object sender, EventArgs e)
         {
-            // Obtener los valores de los campos
             var usuario = txtUserName.Text;
             var contrasena = txtPassword.Text;
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MdiMaster));
             gpPages = new MaterialSkin.Controls.MaterialTabControl();
             tpRClients = new TabPage();
             tpRNewOrder = new TabPage();
@@ -123,6 +124,7 @@
             ClientSize = new Size(737, 523);
             Controls.Add(gpPages);
             DrawerTabControl = gpPages;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             IsMdiContainer = true;
             Margin = new Padding(4, 3, 4, 3);
             Name = "MdiMaster";

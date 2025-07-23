@@ -180,11 +180,13 @@
             Controls.Add(cmbState);
             Controls.Add(dtData);
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmTechnicianOrders";
             Sizable = false;
             StartPosition = FormStartPosition.Manual;
             Text = "Lista de Órdenes";
             TopMost = true;
+            FormClosing += FrmTechnicianOrders_FormClosing;
             ((System.ComponentModel.ISupportInitialize)dtData).EndInit();
             ResumeLayout(false);
             PerformLayout();

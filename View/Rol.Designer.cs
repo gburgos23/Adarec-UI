@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rol));
             cmbRoles = new MaterialSkin.Controls.MaterialComboBox();
             btnContinue = new MaterialSkin.Controls.MaterialButton();
             btnLogout = new PictureBox();
@@ -47,6 +48,7 @@
             cmbRoles.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
             cmbRoles.ForeColor = Color.FromArgb(222, 0, 0, 0);
             cmbRoles.FormattingEnabled = true;
+            cmbRoles.Hint = "Roles";
             cmbRoles.IntegralHeight = false;
             cmbRoles.ItemHeight = 43;
             cmbRoles.Location = new Point(64, 104);
@@ -109,6 +111,7 @@
             Controls.Add(btnContinue);
             Controls.Add(cmbRoles);
             FormStyle = FormStyles.ActionBar_None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Rol";
             Padding = new Padding(3, 24, 3, 3);

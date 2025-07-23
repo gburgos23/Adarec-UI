@@ -38,6 +38,30 @@ namespace Adarec_ui.Controller
             }
         }
 
+        public async Task<ApiResponseDto> GetActiveUsersAsync()
+        {
+            using var client = new HttpClient();
+            var url = $"{_baseUrl}/api/Users/active";
+            try
+            {
+                var response = await client.GetAsync(url);
+                var message = await response.Content.ReadAsStringAsync();
+                return new ApiResponseDto
+                {
+                    Message = message,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponseDto
+                {
+                    Message = $"Error al obtener usuarios: {ex.Message}",
+                    StatusCode = 500
+                };
+            }
+        }
+
         public async Task<ApiResponseDto> AddUserAsync(TechnicianDto user)
         {
             using var client = new HttpClient();
@@ -114,52 +138,5 @@ namespace Adarec_ui.Controller
             }
         }
 
-        public async Task<ApiResponseDto> GetTechnicianWorkloadAsync()
-        {
-            using var client = new HttpClient();
-            var url = $"{_baseUrl}/api/Users/workload";
-            try
-            {
-                var response = await client.GetAsync(url);
-                var message = await response.Content.ReadAsStringAsync();
-                return new ApiResponseDto
-                {
-                    Message = message,
-                    StatusCode = (int)response.StatusCode
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponseDto
-                {
-                    Message = $"Error al obtener carga de trabajo: {ex.Message}",
-                    StatusCode = 500
-                };
-            }
-        }
-
-        public async Task<ApiResponseDto> GetCustomerByIdentificationAsync(string identificationClient)
-        {
-            using var client = new HttpClient();
-            var url = $"{_baseUrl}/api/Customer/{identificationClient}";
-            try
-            {
-                var response = await client.GetAsync(url);
-                var message = await response.Content.ReadAsStringAsync();
-                return new ApiResponseDto
-                {
-                    Message = message,
-                    StatusCode = (int)response.StatusCode
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponseDto
-                {
-                    Message = $"Error al obtener cliente: {ex.Message}",
-                    StatusCode = 500
-                };
-            }
-        }
     }
 }

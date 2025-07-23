@@ -50,7 +50,7 @@ namespace Adarec_ui.View.ChildForms
             _selectedRoleId = selectedRoleId;
             _userData = userDto;
 
-            LoadOrdersAsync(); 
+            LoadOrdersAsync();
         }
 
         public async void LoadOrdersAsync()
@@ -118,7 +118,7 @@ namespace Adarec_ui.View.ChildForms
                 dtData.DataSource = null;
             }
             cmbState.SelectedIndex = -1;
-            rbIdentification.Checked =false;
+            rbIdentification.Checked = false;
             rbNameClient.Checked = false;
             txtFiltrer.Clear();
         }
@@ -195,6 +195,18 @@ namespace Adarec_ui.View.ChildForms
         private void BtnReloadOrders_Click(object sender, EventArgs e)
         {
             LoadOrdersAsync();
+        }
+
+        private void FrmTechnicianOrders_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.ApplicationExitCall ||
+                e.CloseReason == CloseReason.FormOwnerClosing)
+            {
+                return;
+            }
+
+            MessageBox.Show("No se puede cerrar este formulario.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            e.Cancel = true;
         }
     }
 }

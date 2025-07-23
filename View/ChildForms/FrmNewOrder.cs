@@ -81,7 +81,7 @@ namespace Adarec_ui.View.ChildForms
             }
 
             var userController = new UserController();
-            var userResponse = await userController.GetUsersAsync();
+            var userResponse = await userController.GetActiveUsersAsync();
             if (userResponse.StatusCode == 200)
             {
                 var users = JsonConvert.DeserializeObject<List<TechnicianDto>>(userResponse.Message);
@@ -214,8 +214,8 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            var userController = new UserController();
-            var clientResponse = await userController.GetCustomerByIdentificationAsync(txtClient.Text.Trim());
+            var customer = new CustomerController();
+            var clientResponse = await customer.GetCustomerByIdentificationAsync(txtClient.Text.Trim());
             CustomerDto? cliente = null;
             if (clientResponse.StatusCode == 200)
             {

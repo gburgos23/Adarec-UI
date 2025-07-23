@@ -413,6 +413,7 @@
             Controls.Add(dataGridView1);
             Controls.Add(cmbStateOrder);
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmOrderDetail";
             Sizable = false;
             StartPosition = FormStartPosition.CenterScreen;

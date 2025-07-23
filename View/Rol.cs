@@ -47,7 +47,6 @@ namespace Adarec_ui.View
             {
                 var allRoles = JsonConvert.DeserializeObject<List<RolDto>>(response.Message);
 
-                // Filtrar roles según los IDs del usuario
                 var userRoles = allRoles!
                     .Where(r => _userData.IdRol.Contains(r.Id))
                     .ToList();
@@ -55,6 +54,7 @@ namespace Adarec_ui.View
                 cmbRoles.DataSource = userRoles;
                 cmbRoles.DisplayMember = "Name";
                 cmbRoles.ValueMember = "Id";
+                cmbRoles.SelectedIndex = -1;
             }
             else
             {

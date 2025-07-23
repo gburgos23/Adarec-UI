@@ -427,6 +427,7 @@
             Controls.Add(materialCard1);
             Controls.Add(materialDivider1);
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmNewOrder";
             Sizable = false;
             StartPosition = FormStartPosition.Manual;

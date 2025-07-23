@@ -373,6 +373,7 @@
             Controls.Add(txtNameClient);
             Controls.Add(dataGridView1);
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FrmClientManagement";
             Sizable = false;
             StartPosition = FormStartPosition.Manual;
