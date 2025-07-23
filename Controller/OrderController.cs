@@ -192,5 +192,31 @@ namespace Adarec_ui.Controller
                 };
             }
         }
+
+        public async Task<ApiResponseDto> AddDeviceDetailsAsync(DeviceDetailDto deviceDetails)
+        {
+            using var client = new HttpClient();
+            var url = $"{_baseUrl}/api/Item/device-details";
+            var json = JsonConvert.SerializeObject(deviceDetails);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await client.PostAsync(url, content);
+                var message = await response.Content.ReadAsStringAsync();
+                return new ApiResponseDto
+                {
+                    Message = message,
+                    StatusCode = (int)response.StatusCode
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponseDto
+                {
+                    Message = $"Error al insertar los detalles de dispositivos: {ex.Message}",
+                    StatusCode = 500
+                };
+            }
+        }
     }
 }

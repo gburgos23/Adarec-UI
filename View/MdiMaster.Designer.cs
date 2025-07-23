@@ -125,7 +125,6 @@
             DrawerTabControl = gpPages;
             IsMdiContainer = true;
             Margin = new Padding(4, 3, 4, 3);
-            MaximizeBox = false;
             Name = "MdiMaster";
             Padding = new Padding(3, 64, 4, 3);
             Sizable = false;

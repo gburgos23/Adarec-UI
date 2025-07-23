@@ -18,15 +18,23 @@ namespace Adarec_ui.View
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
 
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey800,
-                Primary.BlueGrey900,
-                Primary.BlueGrey500,
-                Accent.Orange700,
-                TextShade.WHITE
-            );
+                Primary.Teal500,
+                Primary.Teal700,
+                Primary.Teal100,
+                Accent.Orange200,
+                TextShade.BLACK);
+
+            lblSelectRol.Text = "Seleccione el Rol";
+            lblSelectRol.Font = new Font("Segoe UI", 17F, FontStyle.Regular);
+            lblSelectRol.ForeColor = Color.FromArgb(0, 150, 136); 
+            lblSelectRol.BackColor = Color.Transparent;
+            lblSelectRol.TextAlign = ContentAlignment.MiddleCenter;
+            lblSelectRol.AutoSize = false;
+            lblSelectRol.Size = new Size(300, 38);
+            lblSelectRol.Location = new Point((this.Width - lblSelectRol.Width) / 2, 40);
+            
             _userData = userData;
         }
 
@@ -46,32 +54,11 @@ namespace Adarec_ui.View
 
                 cmbRoles.DataSource = userRoles;
                 cmbRoles.DisplayMember = "Name";
-                cmbRoles.ValueMember = "RolId";
+                cmbRoles.ValueMember = "Id";
             }
             else
             {
                 MessageBox.Show("No se pudieron cargar los roles.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Rol_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                var result = MessageBox.Show(
-                    "¿Seguro que quieres salir?",
-                    "Confirmar",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (result == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    Application.Exit();
-                }
             }
         }
 
@@ -91,7 +78,16 @@ namespace Adarec_ui.View
 
         private void BtnContinue_Click(object sender, EventArgs e)
         {
-            //Aqui pasar datos al mdi que tendra todas las ventanas
+            if (cmbRoles.SelectedValue is int selectedRol)
+            {
+                SelectedRol = selectedRol;
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Por favor selecciona un rol.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

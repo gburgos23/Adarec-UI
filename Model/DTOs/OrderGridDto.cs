@@ -12,8 +12,10 @@ namespace Adarec_ui.Model.DTOs
         public string Descripcion { get; set; }
         public string FechaProgramada { get; set; }
         public string Estado { get; set; }
+        public string EstadoDescripcion { get; set; }
         public string Cliente { get; set; }
         public string CedulaCliente { get; set; }
         public string Tecnico { get; set; }
+        public string TecnicoNombre { get; set; }
     }
 }

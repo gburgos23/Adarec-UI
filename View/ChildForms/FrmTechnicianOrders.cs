@@ -22,31 +22,40 @@ namespace Adarec_ui.View.ChildForms
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
 
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey800,
-                Primary.BlueGrey900,
-                Primary.BlueGrey500,
-                Accent.Orange700,
-                TextShade.WHITE
-            );
+                Primary.Teal500,
+                Primary.Teal700,
+                Primary.Teal100,
+                Accent.Orange200,
+                TextShade.BLACK);
+
+            dtData.BackgroundColor = ColorTranslator.FromHtml("#E0F2F1");
+            dtData.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#B2DFDB");
+            dtData.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+            dtData.DefaultCellStyle.ForeColor = ColorTranslator.FromHtml("#004D40");
+            dtData.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#80CBC4");
+            dtData.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dtData.DefaultCellStyle.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+
+            dtData.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#26A69A");
+            dtData.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dtData.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+
+            dtData.GridColor = ColorTranslator.FromHtml("#B2DFDB");
+            dtData.BorderStyle = BorderStyle.None;
+            dtData.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dtData.EnableHeadersVisualStyles = false;
+
             _selectedRoleId = selectedRoleId;
             _userData = userDto;
 
-            dtData.BackgroundColor = Color.FromArgb(55, 71, 79);
-            dtData.DefaultCellStyle.BackColor = Color.FromArgb(55, 71, 79);
-            dtData.DefaultCellStyle.ForeColor = Color.White;
-            dtData.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 45);
-            dtData.ColumnHeadersDefaultCellStyle.ForeColor = Color.Orange;
-            dtData.EnableHeadersVisualStyles = false;
-
-            CargarOrdenes();
-            PrecargarEstadosAsync();
+            LoadOrdersAsync(); 
         }
 
-        private async void CargarOrdenes()
+        public async void LoadOrdersAsync()
         {
+            LoadStatesAsync();
             var orderController = new OrderController();
             ApiResponseDto response;
             if (_selectedRoleId == (int)Roles.technician)
@@ -73,9 +82,11 @@ namespace Adarec_ui.View.ChildForms
                             Descripcion = orden.Description ?? string.Empty,
                             FechaProgramada = orden.ScheduledFor?.ToString("yyyy/MM/dd")!,
                             Estado = orden.Status.ToString() ?? string.Empty,
+                            EstadoDescripcion = orden.StatusDescription ?? string.Empty,
                             Cliente = tecnico.Customer?.Name ?? orden.CustomerName ?? string.Empty,
                             CedulaCliente = tecnico.Customer?.IdentificationNumber ?? string.Empty,
-                            Tecnico = tecnico.TechnicianId.ToString() ?? string.Empty
+                            Tecnico = tecnico.TechnicianId.ToString() ?? string.Empty,
+                            TecnicoNombre = tecnico.TechnicianName ?? string.Empty,
                         });
                     }
                 }
@@ -89,22 +100,30 @@ namespace Adarec_ui.View.ChildForms
                 if (dtData.Columns["FechaProgramada"] != null)
                     dtData.Columns["FechaProgramada"].HeaderText = "Fecha Programada";
                 if (dtData.Columns["Estado"] != null)
-                    dtData.Columns["Estado"].HeaderText = "Estado";
+                    dtData.Columns["Estado"].Visible = false;
+                if (dtData.Columns["EstadoDescripcion"] != null)
+                    dtData.Columns["EstadoDescripcion"].HeaderText = "Estado";
                 if (dtData.Columns["Cliente"] != null)
                     dtData.Columns["Cliente"].HeaderText = "Cliente";
                 if (dtData.Columns["CedulaCliente"] != null)
                     dtData.Columns["CedulaCliente"].HeaderText = "Cédula Cliente";
                 if (dtData.Columns["Tecnico"] != null)
-                    dtData.Columns["Tecnico"].HeaderText = "Técnico";
+                    dtData.Columns["Tecnico"].Visible = false;
+                if (dtData.Columns["TecnicoNombre"] != null)
+                    dtData.Columns["TecnicoNombre"].HeaderText = "Técnico";
             }
             else
             {
                 MessageBox.Show("No se pudieron cargar las órdenes.\n" + response.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 dtData.DataSource = null;
             }
+            cmbState.SelectedIndex = -1;
+            rbIdentification.Checked =false;
+            rbNameClient.Checked = false;
+            txtFiltrer.Clear();
         }
 
-        private async void PrecargarEstadosAsync()
+        private async void LoadStatesAsync()
         {
             var orderController = new OrderController();
             var response = await orderController.GetAllOrderStatusesAsync();
@@ -122,7 +141,7 @@ namespace Adarec_ui.View.ChildForms
             }
         }
 
-        private void FiltrarOrdenes(object sender, EventArgs e)
+        private void FilterOrders(object sender, EventArgs e)
         {
             IEnumerable<OrderGridDto> filtradas = ordenesOriginal;
 
@@ -157,7 +176,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Encuentra el TabPage actual
             var tab = this.Parent as TabPage;
             if (tab == null)
             {
@@ -172,6 +190,11 @@ namespace Adarec_ui.View.ChildForms
             tab.Controls.Add(frmDetalle);
             frmDetalle.BringToFront();
             frmDetalle.Show();
+        }
+
+        private void BtnReloadOrders_Click(object sender, EventArgs e)
+        {
+            LoadOrdersAsync();
         }
     }
 }

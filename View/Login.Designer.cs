@@ -33,7 +33,7 @@
             btnLogin = new MaterialSkin.Controls.MaterialButton();
             pictureBox1 = new PictureBox();
             btnLogout = new PictureBox();
-            label1 = new Label();
+            lblTitulo = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)btnLogout).BeginInit();
             SuspendLayout();
@@ -140,16 +140,16 @@
             btnLogout.TabStop = false;
             btnLogout.Click += btnLogout_Click;
             // 
-            // label1
+            // lblTitulo
             // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(101, 177);
-            label1.Name = "label1";
-            label1.Size = new Size(137, 30);
-            label1.TabIndex = 7;
-            label1.Text = "Iniciar Sesión";
+            lblTitulo.AutoSize = true;
+            lblTitulo.BackColor = Color.Transparent;
+            lblTitulo.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.Location = new Point(101, 177);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(137, 30);
+            lblTitulo.TabIndex = 7;
+            lblTitulo.Text = "Iniciar Sesión";
             // 
             // Login
             // 
@@ -157,7 +157,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(337, 552);
             ControlBox = false;
-            Controls.Add(label1);
+            Controls.Add(lblTitulo);
             Controls.Add(btnLogout);
             Controls.Add(pictureBox1);
             Controls.Add(btnLogin);
@@ -182,6 +182,6 @@
         private MaterialSkin.Controls.MaterialButton btnLogin;
         private PictureBox pictureBox1;
         private PictureBox btnLogout;
-        private Label label1;
+        private Label lblTitulo;
     }
 }

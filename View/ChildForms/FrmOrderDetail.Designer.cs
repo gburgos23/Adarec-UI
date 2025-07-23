@@ -80,7 +80,7 @@
             // 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(27, 559);
             dataGridView1.Name = "dataGridView1";
@@ -282,7 +282,7 @@
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
             pbImage.TabIndex = 0;
             pbImage.TabStop = false;
-            pbImage.Click += pictureBox1_Click;
+            pbImage.Click += PictureBox1_Click;
             // 
             // materialDivider1
             // 
@@ -415,8 +415,10 @@
             MaximizeBox = false;
             Name = "FrmOrderDetail";
             Sizable = false;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Detalle de Orden";
             TopMost = true;
+            FormClosed += FrmOrderDetail_FormClosed;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtEquipos).EndInit();
             materialCard2.ResumeLayout(false);

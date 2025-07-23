@@ -16,15 +16,22 @@ namespace Adarec_ui.View
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
 
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey800,
-                Primary.BlueGrey900,
-                Primary.BlueGrey500,
-                Accent.Orange700,
-                TextShade.WHITE
-            );
+                Primary.Teal500,
+                Primary.Teal700,
+                Primary.Teal100,
+                Accent.Orange200,
+                TextShade.BLACK);
+
+            lblTitulo.Text = "Iniciar Sesión";
+            lblTitulo.Font = new Font("Segoe UI", 17F, FontStyle.Regular);
+            lblTitulo.ForeColor = Color.FromArgb(0, 150, 136); // Verde azulado (como tu botón)
+            lblTitulo.BackColor = Color.Transparent;
+            lblTitulo.TextAlign = ContentAlignment.MiddleCenter;
+            lblTitulo.AutoSize = false;
+            lblTitulo.Size = new Size(300, 38);
+            lblTitulo.Location = new Point((this.Width - lblTitulo.Width) / 2, 160);
         }
 
         private void TxtPassword_KeyDown(object sender, KeyEventArgs e)

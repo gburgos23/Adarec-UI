@@ -7,6 +7,7 @@ namespace Adarec_ui.Model.DTOs
         public string? CustomerName { get; set; }
         public string? Description { get; set; }
         public int? Status { get; set; }
+        public string? StatusDescription { get; set; }
         public DateTime? ScheduledFor { get; set; }
     }
 }

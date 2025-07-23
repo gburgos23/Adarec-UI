@@ -18,15 +18,13 @@ namespace Adarec_ui.View
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
 
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey800,
-                Primary.BlueGrey900,
-                Primary.BlueGrey500,
-                Accent.Orange700,
-                TextShade.WHITE
-            );
+                Primary.Teal500,
+                Primary.Teal700,
+                Primary.Teal100,
+                Accent.Orange200,
+                TextShade.BLACK);
 
             _userData = userData;
             _rolSeleccionado = rolSeleccionado;

@@ -1,7 +1,6 @@
 ﻿using Adarec_ui.Model.DTOs;
 using Newtonsoft.Json;
 using System.Configuration;
-using System.Text.Json;
 
 namespace Adarec_ui.Controller
 {

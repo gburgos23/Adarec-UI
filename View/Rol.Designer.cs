@@ -28,24 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             cmbRoles = new MaterialSkin.Controls.MaterialComboBox();
             btnContinue = new MaterialSkin.Controls.MaterialButton();
             btnLogout = new PictureBox();
+            lblSelectRol = new Label();
             ((System.ComponentModel.ISupportInitialize)btnLogout).BeginInit();
             SuspendLayout();
-            // 
-            // materialLabel1
-            // 
-            materialLabel1.AutoSize = true;
-            materialLabel1.Depth = 0;
-            materialLabel1.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel1.Location = new Point(125, 53);
-            materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            materialLabel1.Name = "materialLabel1";
-            materialLabel1.Size = new Size(199, 19);
-            materialLabel1.TabIndex = 0;
-            materialLabel1.Text = "Seleccione su rol de acceso:";
             // 
             // cmbRoles
             // 
@@ -101,16 +89,25 @@
             btnLogout.TabStop = false;
             btnLogout.Click += BtnLogout_Click;
             // 
+            // lblSelectRol
+            // 
+            lblSelectRol.AutoSize = true;
+            lblSelectRol.Location = new Point(196, 48);
+            lblSelectRol.Name = "lblSelectRol";
+            lblSelectRol.Size = new Size(38, 15);
+            lblSelectRol.TabIndex = 8;
+            lblSelectRol.Text = "label1";
+            // 
             // Rol
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(444, 261);
             ControlBox = false;
+            Controls.Add(lblSelectRol);
             Controls.Add(btnLogout);
             Controls.Add(btnContinue);
             Controls.Add(cmbRoles);
-            Controls.Add(materialLabel1);
             FormStyle = FormStyles.ActionBar_None;
             MaximizeBox = false;
             Name = "Rol";
@@ -118,7 +115,6 @@
             Sizable = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Rol";
-            FormClosing += Rol_FormClosing;
             Load += Rol_Load;
             ((System.ComponentModel.ISupportInitialize)btnLogout).EndInit();
             ResumeLayout(false);
@@ -126,10 +122,9 @@
         }
 
         #endregion
-
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialComboBox cmbRoles;
         private MaterialSkin.Controls.MaterialButton btnContinue;
         private PictureBox btnLogout;
+        private Label lblSelectRol;
     }
 }

@@ -4,6 +4,9 @@ namespace Adarec_ui.Model.DTOs
 {
     public class DeviceDetailDto
     {
+        [JsonProperty("orderId")]
+        public int? OrderId { get; set; }
+
         [JsonProperty("detailId")]
         public int? DetailId { get; set; }
 

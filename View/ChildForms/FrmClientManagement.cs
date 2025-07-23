@@ -10,33 +10,48 @@ namespace Adarec_ui.View.ChildForms
     public partial class FrmClientManagement : MaterialForm
     {
         private readonly CustomerController _customerController = new();
-        private List<CustomerDto> clientesOriginal = new();
+        private List<CustomerDto> clientesOriginal = [];
+        private bool cancelValidation = false;
 
         public FrmClientManagement()
         {
             InitializeComponent();
-
             var materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
 
-            materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey800,
-                Primary.BlueGrey900,
-                Primary.BlueGrey500,
-                Accent.Orange700,
-                TextShade.WHITE
-            );
+                Primary.Teal500,
+                Primary.Teal700,
+                Primary.Teal100,
+                Accent.Orange200,
+                TextShade.BLACK);
+
+            dataGridView1.BackgroundColor = ColorTranslator.FromHtml("#E0F2F1");
+            dataGridView1.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#B2DFDB");
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+            dataGridView1.DefaultCellStyle.ForeColor = ColorTranslator.FromHtml("#004D40");
+            dataGridView1.DefaultCellStyle.SelectionBackColor = ColorTranslator.FromHtml("#80CBC4");
+            dataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = ColorTranslator.FromHtml("#26A69A");
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+
+            dataGridView1.GridColor = ColorTranslator.FromHtml("#B2DFDB");
+            dataGridView1.BorderStyle = BorderStyle.None;
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dataGridView1.EnableHeadersVisualStyles = false;
         }
 
         private async void FrmClientManagement_Load(object sender, EventArgs e)
         {
-            await CargarClientesEnGrid();
-            await PrecargarTiposIdentificacion();
+            await LoadClientsAsync();
+            await LoadIdTypesAsync();
         }
 
-        private async Task CargarClientesEnGrid()
+        private async Task LoadClientsAsync()
         {
             var response = await _customerController.GetAllCustomers();
             if (response.StatusCode == 200)
@@ -44,16 +59,8 @@ namespace Adarec_ui.View.ChildForms
                 clientesOriginal = JsonConvert.DeserializeObject<List<CustomerDto>>(response.Message) ?? new List<CustomerDto>();
                 dataGridView1.DataSource = clientesOriginal;
 
-                dataGridView1.BackgroundColor = Color.FromArgb(55, 71, 79);
-                dataGridView1.DefaultCellStyle.BackColor = Color.FromArgb(55, 71, 79);
-                dataGridView1.DefaultCellStyle.ForeColor = Color.White;
-                dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 45);
-                dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.Orange;
-                dataGridView1.EnableHeadersVisualStyles = false;
-
                 if (dataGridView1.Columns["IdentificationTypeId"] != null)
                     dataGridView1.Columns["IdentificationTypeId"].Visible = false;
-
                 if (dataGridView1.Columns["CustomerId"] != null)
                     dataGridView1.Columns["CustomerId"].HeaderText = "ID";
                 if (dataGridView1.Columns["Name"] != null)
@@ -69,12 +76,12 @@ namespace Adarec_ui.View.ChildForms
             }
             else
             {
-                MessageBox.Show("No se pudieron cargar los clientes.\n" + response.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"No se pudieron cargar los clientes.\n {response.Message}", "Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 dataGridView1.DataSource = null;
             }
         }
 
-        private async Task PrecargarTiposIdentificacion()
+        private async Task LoadIdTypesAsync()
         {
             var response = await _customerController.GetIdentificationTypes();
             if (response.StatusCode == 200)
@@ -101,9 +108,14 @@ namespace Adarec_ui.View.ChildForms
             txtIdentificationClient.SelectionStart = txtIdentificationClient.Text.Length;
         }
 
-
         private void TxtEmail_Leave(object sender, EventArgs e)
         {
+            if (cancelValidation)
+            {
+                cancelValidation = false;
+                return;
+            }
+
             if (!Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 MessageBox.Show("Correo electrónico no válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -113,15 +125,15 @@ namespace Adarec_ui.View.ChildForms
 
         private void TxtNameClient_TextChanged(object sender, EventArgs e)
         {
-            SanitizarCampo(txtNameClient);
+            SanitizeField(txtNameClient);
         }
 
         private void TxtAddress_TextChanged(object sender, EventArgs e)
         {
-            SanitizarCampo(txtAddress);
+            SanitizeField(txtAddress);
         }
 
-        private void SanitizarCampo(MaterialTextBox txt)
+        private void SanitizeField(MaterialTextBox txt)
         {
             string texto = Regex.Replace(txt.Text, @"[;'\-""\\/*%]", string.Empty);
             if (txt.Text != texto)
@@ -134,7 +146,6 @@ namespace Adarec_ui.View.ChildForms
 
         private async void BtnAdd_Click(object sender, EventArgs e)
         {
-            // Validar selección de tipo de identificación
             if (cmbIdentificationType.SelectedValue == null)
             {
                 MessageBox.Show("Seleccione el tipo de identificación.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -142,7 +153,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Validar campos obligatorios
             if (string.IsNullOrWhiteSpace(txtNameClient.Text) ||
                 string.IsNullOrWhiteSpace(txtIdentificationClient.Text) ||
                 string.IsNullOrWhiteSpace(txtEmail.Text) ||
@@ -153,10 +163,16 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
+            if (!Regex.IsMatch(txtPhone.Text.Trim(), @"^09\d{8}$"))
+            {
+                MessageBox.Show("El teléfono debe tener 10 dígitos y empezar con 09.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPhone.Focus();
+                return;
+            }
+
             int tipoId = Convert.ToInt32(cmbIdentificationType.SelectedValue);
             string identificacion = txtIdentificationClient.Text.Trim();
 
-            // Validar longitud de identificación según tipo
             if (tipoId == 1 && identificacion.Length != 13)
             {
                 MessageBox.Show("El RUC debe tener 13 dígitos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -184,7 +200,7 @@ namespace Adarec_ui.View.ChildForms
             if (response.StatusCode == 201)
             {
                 MessageBox.Show("Cliente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await CargarClientesEnGrid();
+                await LoadClientsAsync();
             }
             else
             {
@@ -194,23 +210,19 @@ namespace Adarec_ui.View.ChildForms
 
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            // Verifica que haya una fila seleccionada
             if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("Seleccione un cliente para editar.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Oculta botones de acciones principales
             btnUpdate.Visible = false;
             btnDelete.Visible = false;
             btnAdd.Visible = false;
 
-            // Muestra botones de confirmación/cancelación
             btnUpdateConfirm.Visible = true;
             btnUpdateCancel.Visible = true;
 
-            // Precarga los campos con los datos del cliente seleccionado
             var cliente = dataGridView1.CurrentRow.DataBoundItem as CustomerDto;
             if (cliente != null)
             {
@@ -225,7 +237,6 @@ namespace Adarec_ui.View.ChildForms
 
         private async void BtnUpdateConfirm_Click(object sender, EventArgs e)
         {
-            // Validar selección de tipo de identificación
             if (cmbIdentificationType.SelectedValue == null)
             {
                 MessageBox.Show("Seleccione el tipo de identificación.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -233,7 +244,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Validar campos obligatorios
             if (string.IsNullOrWhiteSpace(txtNameClient.Text) ||
                 string.IsNullOrWhiteSpace(txtIdentificationClient.Text) ||
                 string.IsNullOrWhiteSpace(txtEmail.Text) ||
@@ -244,10 +254,16 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
+            if (!Regex.IsMatch(txtPhone.Text.Trim(), @"^09\d{8}$"))
+            {
+                MessageBox.Show("El teléfono debe tener 10 dígitos y empezar con 09.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPhone.Focus();
+                return;
+            }
+
             int tipoId = Convert.ToInt32(cmbIdentificationType.SelectedValue);
             string identificacion = txtIdentificationClient.Text.Trim();
 
-            // Validar longitud de identificación según tipo
             if (tipoId == 1 && identificacion.Length != 13)
             {
                 MessageBox.Show("El RUC debe tener 13 dígitos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -261,7 +277,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Validar formato de correo
             if (!Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 MessageBox.Show("Correo electrónico no válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -269,7 +284,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Obtener el cliente seleccionado
             if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("No se ha seleccionado ningún cliente.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -282,7 +296,6 @@ namespace Adarec_ui.View.ChildForms
                 return;
             }
 
-            // Actualizar datos
             cliente.Name = txtNameClient.Text.Trim();
             cliente.IdentificationNumber = identificacion;
             cliente.IdentificationTypeId = tipoId;
@@ -294,7 +307,7 @@ namespace Adarec_ui.View.ChildForms
             if (response.StatusCode == 200)
             {
                 MessageBox.Show("Cliente actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await CargarClientesEnGrid();
+                await LoadClientsAsync();
             }
             else
             {
@@ -304,14 +317,12 @@ namespace Adarec_ui.View.ChildForms
 
         private void BtnUpdateCancel_Click(object sender, EventArgs e)
         {
-            // Restablece visibilidad de botones
             btnUpdate.Visible = true;
             btnDelete.Visible = true;
             btnAdd.Visible = true;
             btnUpdateConfirm.Visible = false;
             btnUpdateCancel.Visible = false;
 
-            // Limpia los campos
             txtNameClient.Text = "";
             txtIdentificationClient.Text = "";
             cmbIdentificationType.SelectedIndex = -1;
@@ -322,7 +333,6 @@ namespace Adarec_ui.View.ChildForms
 
         private async void BtnDelete_Click(object sender, EventArgs e)
         {
-            // Verifica que haya una fila seleccionada
             if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("Seleccione un cliente para eliminar.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -346,10 +356,10 @@ namespace Adarec_ui.View.ChildForms
                 return;
 
             var response = await _customerController.DeleteCustomer(cliente.CustomerId);
-            if (response.StatusCode == 200)
+            if (response.StatusCode == 204)
             {
                 MessageBox.Show("Cliente eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await CargarClientesEnGrid();
+                await LoadClientsAsync();
             }
             else
             {
@@ -367,7 +377,7 @@ namespace Adarec_ui.View.ChildForms
             txtPhone.SelectionStart = txtPhone.Text.Length;
         }
 
-        private void FiltrarClientes()
+        private void FilterClients()
         {
             string filtro = txtFiltrer.Text.Trim().ToLower();
 
@@ -390,17 +400,26 @@ namespace Adarec_ui.View.ChildForms
 
         private void TxtFilter_TextChanged(object sender, EventArgs e)
         {
-            FiltrarClientes();
+            FilterClients();
         }
 
         private void RbIdentificacion_CheckedChanged(object sender, EventArgs e)
         {
-            FiltrarClientes();
+            FilterClients();
         }
 
         private void RbNombre_CheckedChanged(object sender, EventArgs e)
         {
-            FiltrarClientes();
+            FilterClients();
+        }
+
+        private void TxtEmail_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                cancelValidation = true;
+                this.ActiveControl = null;
+            }
         }
     }
 }
