@@ -83,10 +83,9 @@ namespace Adarec_ui.View.ChildForms
 
         private void SetControlsByRole(int orderStatus)
         {
-            bool isEnable = _selectedRoleId == (int)Roles.admin && orderStatus != (int)OrderStatus.closed;
+            bool isEnable = _selectedRoleId == (int)Roles.technician && orderStatus != (int)OrderStatus.closed;
 
             txtComment.Enabled = isEnable;
-            txtOrderId.Enabled = isEnable;
             txtDevSpec.Enabled = isEnable;
             txtQuantity.Enabled = isEnable;
             cmbStateOrder.Enabled = isEnable;
@@ -168,10 +167,10 @@ namespace Adarec_ui.View.ChildForms
             dataGridView1.Columns.Add("Comentario", "Comentario");
             dataGridView1.Columns.Add("Autor", "Autor");
 
-            foreach (var comment in comments)
+            foreach (var comment in comments.OrderByDescending(c => c.CreatedAt))
             {
                 dataGridView1.Rows.Add(
-                    comment.CreatedAt.ToString("dd/MM/yyyy"),
+                    comment.CreatedAt.ToString("yyyy/MM/dd HH:mm:ss"),
                     comment.Comment,
                     comment.UserName
                 );
@@ -327,7 +326,7 @@ namespace Adarec_ui.View.ChildForms
                             Directory.CreateDirectory(basePath);
 
                         string ext = Path.GetExtension(selectedImagePath).ToLower();
-                        string fileName = $"{DateTime.Now:yyyyMMdd}-{equipo.OrderId}-{equipo.DetailId}-solution{ext}";
+                        string fileName = $"{DateTime.Now.ToLocalTime():yyyyMMdd}-{equipo.OrderId}-{equipo.DetailId}-solution{ext}";
                         string destPath = Path.Combine(basePath, fileName);
 
                         File.Copy(selectedImagePath, destPath, true);
@@ -433,7 +432,7 @@ namespace Adarec_ui.View.ChildForms
                         UserId = _userData.UserId,
                         UserName = _userData.Name,
                         Comment = txtComment.Text,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.Now.ToLocalTime()
                     }
                 ]
             };

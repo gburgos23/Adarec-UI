@@ -96,20 +96,21 @@ namespace Adarec_ui.View.ChildForms
                 workloadData = JsonConvert.DeserializeObject<List<TechnicianWorkloadDto>>(workloadResponse.Message) ?? [];
 
             pieStatus.Series = [.. statusData
-                .Select(x => new PieSeries<int>
+                .GroupBy(x => x.Status)
+                .Select(g => new PieSeries<int>
                 {
-                    Name = x.Status,
-                    Values = [x.Count]
+                    Name = g.Key,
+                    Values = [g.Sum(x => x.Count)] 
                 })];
 
-            barWorkload.Series = new ISeries[]
-            {
+            barWorkload.Series =
+            [
                 new ColumnSeries<int>
                 {
                     Name = "Orders",
                     Values = [.. workloadData.Select(x => x.AssignedOrdersCount)]
                 }
-            };
+            ];
             barWorkload.XAxes = [new Axis { Labels = [.. workloadData.Select(x => x.TechnicianName)] }];
         }
 

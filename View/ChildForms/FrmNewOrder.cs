@@ -235,7 +235,7 @@ namespace Adarec_ui.View.ChildForms
             var order = new OrderDto
             {
                 Description = txtFailDesc.Text.Trim(),
-                ScheduledFor = dpDate.Value,
+                ScheduledFor = dpDate.Value.ToLocalTime(),
                 OrderStatusId = 1,
                 Customer = cliente!,
                 Devices = [],
@@ -244,7 +244,7 @@ namespace Adarec_ui.View.ChildForms
                 {
                     Comment = txtFailDesc.Text.Trim(),
                     UserId = _userData.UserId,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now.ToLocalTime()
                 }
             };
 

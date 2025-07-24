@@ -83,8 +83,8 @@ namespace Adarec_ui.View.ChildForms
                             FechaProgramada = orden.ScheduledFor?.ToString("yyyy/MM/dd")!,
                             Estado = orden.Status.ToString() ?? string.Empty,
                             EstadoDescripcion = orden.StatusDescription ?? string.Empty,
-                            Cliente = tecnico.Customer?.Name ?? orden.CustomerName ?? string.Empty,
-                            CedulaCliente = tecnico.Customer?.IdentificationNumber ?? string.Empty,
+                            Cliente = orden.CustomerName ?? string.Empty,
+                            CedulaCliente = orden.CustomerIdentification ?? string.Empty,
                             Tecnico = tecnico.TechnicianId.ToString() ?? string.Empty,
                             TecnicoNombre = tecnico.TechnicianName ?? string.Empty,
                         });

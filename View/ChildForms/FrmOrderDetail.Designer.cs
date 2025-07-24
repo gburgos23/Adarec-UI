@@ -97,7 +97,7 @@
             txtComment.Hint = "Nuevo Comentario";
             txtComment.LeadingIcon = null;
             txtComment.Location = new Point(27, 727);
-            txtComment.MaxLength = 50;
+            txtComment.MaxLength = 32767;
             txtComment.MouseState = MaterialSkin.MouseState.OUT;
             txtComment.Multiline = false;
             txtComment.Name = "txtComment";

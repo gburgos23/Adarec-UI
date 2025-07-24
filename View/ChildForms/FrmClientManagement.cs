@@ -53,6 +53,7 @@ namespace Adarec_ui.View.ChildForms
 
         private async Task LoadClientsAsync()
         {
+            CleanData();
             var response = await _customerController.GetAllCustomers();
             if (response.StatusCode == 200)
             {
@@ -317,6 +318,10 @@ namespace Adarec_ui.View.ChildForms
 
         private void BtnUpdateCancel_Click(object sender, EventArgs e)
         {
+            CleanData();
+        }
+
+        private void CleanData(){
             btnUpdate.Visible = true;
             btnDelete.Visible = true;
             btnAdd.Visible = true;
